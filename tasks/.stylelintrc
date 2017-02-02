@@ -1,0 +1,6 @@
+{
+    "rules": {
+        "color-hex-case": [ "lower" ],
+        "font-weight-notation": "numeric"
+    }
+}

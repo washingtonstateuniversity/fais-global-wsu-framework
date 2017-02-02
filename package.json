@@ -1,0 +1,32 @@
+{
+    "name": "inline",
+    "version": "0.0.1",
+    "build_version": "1",
+    "repository": {
+        "type": "git",
+        "url": " "
+    },
+    "file": "flexed",
+    "devDependencies": {
+        "stylelint": "^7.6.0",
+        "grunt": "~1.0.1",
+        "glob": "^7.1.1",
+        "node-sass":"^3.13.0",
+        "request":"^2.79.0",
+        "zlib":"^1.0.5",
+
+
+        "fs-extra": "^1.0.0",
+
+        "load-grunt-tasks": "~3.5.2",
+        "grunt-cli": "1.2.0",
+        "grunt-autoprefixer": "~3.0.4",
+        "grunt-contrib-copy": "~1.0.0",
+        "grunt-contrib-cssmin": "~1.0.2",
+        "grunt-contrib-jshint": "~1.1.0",
+        "grunt-contrib-uglify": "^2.0.0",
+        "grunt-contrib-watch": "~1.0.0",
+
+        "grunt-stylelint": "^0.6.0"
+    }
+}
