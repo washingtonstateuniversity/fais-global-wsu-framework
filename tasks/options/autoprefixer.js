@@ -1,4 +1,4 @@
-let ns = "wsu";
+var ns = "wsu";
 module.exports = {  // note that this is temp, we would not hard code this
     options: {
         browsers: [ "last 2 versions","ie 9","ie 10"], //"> 1%",

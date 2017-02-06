@@ -2,11 +2,23 @@
     "name": "inline",
     "version": "0.0.1",
     "build_version": "1",
+    "private": true,
+    "scripts": {
+      "start": "tsc && concurrently \"tsc -w\" \"lite-server\" ",
+      "lite": "lite-server",
+      "tsc": "tsc",
+      "tsc:w": "tsc -w"
+    },
+    "licenses": [
+      {
+        "type": "MIT",
+        "url": ""
+      }
+    ],
     "repository": {
         "type": "git",
         "url": " "
     },
-    "file": "flexed",
     "devDependencies": {
         "stylelint": "^7.6.0",
         "grunt": "~1.0.1",
@@ -27,6 +39,18 @@
         "grunt-contrib-uglify": "^2.0.0",
         "grunt-contrib-watch": "~1.0.0",
 
-        "grunt-stylelint": "^0.6.0"
+        "grunt-stylelint": "^0.6.0",
+
+
+        "@types/core-js": "^0.9.34",
+        "@types/node": "^6.0.46",
+        "concurrently": "^3.1.0",
+        "del": "^2.2.2",
+        "lite-server": "^2.2.2",
+        "ts-node": "^1.7.0",
+        "tslint": "^4.0.2",
+        "typescript": "^2.0.10",
+        "typings": "^2.0.0",
+        "grunt-ts":"^6.0.0-beta.11"
     }
 }

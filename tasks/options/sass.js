@@ -1,4 +1,4 @@
-let ns = "wsu"; // skiping later @todo remove
+var ns = "wsu"; // skiping later @todo remove
 module.exports = {  // note that this is temp, we would not hard code this
 options: {
     sourceMap: true,

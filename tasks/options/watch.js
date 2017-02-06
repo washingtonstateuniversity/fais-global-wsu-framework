@@ -2,5 +2,5 @@ module.exports = {
     files: [
         "src/**/*",
     ],
-    tasks: [  "stylelint", "sassport", "jshint", "autoprefixer", "cssmin",   "copy" ] //"uglify" ,
+    tasks: [  "ts:default", "stylelint", "sassport", "jshint", "autoprefixer", "cssmin",   "copy" ] //"uglify" ,
 };

@@ -1,15 +1,15 @@
-let ns = "wsu";
-let sets = {  // note that this is temp, we would not hard code this
+var ns = "wsu";
+var sets = {  // note that this is temp, we would not hard code this
     wsu_typography:{},
     wsu_ie:{},
     wsu_ui:{},
     wsu_slim:{},
     wsu_custom:{},
 };
-
-sets.wsu_typography["./dist/extra/"+ns+"-typography.css"]=["./.build/_precss/"+ns+"-typography.css"];
-sets.wsu_ie["./dist/extra/"+ns+"-ie9-.support.css"]=["./.build/_precss/"+ns+"-ie9-.support.css"];
-sets.wsu_ui["./dist/extra/"+ns+"-ui.css"]=["./.build/_precss/"+ns+"-ui.css"];
+var grunt = require( "grunt" );
+sets.wsu_typography["./dist/css/"+ns+"-typography.css"]=["./.build/_precss/"+ns+"-typography.css"];
+sets.wsu_ie["./dist/css/"+ns+"-ie9-.support.css"]=["./.build/_precss/"+ns+"-ie9-.support.css"];
+sets.wsu_ui["./dist/css/"+ns+"-ui.css"]=["./.build/_precss/"+ns+"-ui.css"];
 sets.wsu_slim["../dist/"+ns+"-slim.css"]=["./.build/_precss/"+ns+"-slim.css"];
 sets.wsu_custom["./dist/"+ns+"-custom.css"]=["./.build/_precss/"+ns+"-custom.css"];
 

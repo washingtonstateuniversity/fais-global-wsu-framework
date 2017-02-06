@@ -92,14 +92,14 @@ module.exports = function(grunt) {
           // note that this is temp, we would not hard code this
         var custom = "480 667 996";
 
-        let ns = "wsu";
+        var ns = "wsu";
 
-        render_sass( "./src/scss/"+ns+"-typography.scss", "./.build/_pre_sass/"+ns+"-typography.css" , '$globalVmsize: null;'  );
-        render_sass( "./src/scss/"+ns+"-ui.scss", "./.build/_pre_sass/"+ns+"-ui.css" , '$globalVmsize: ' + custom + ";" );
-        render_sass( "./src/scss/"+ns+"-ie9-.support.scss", "./.build/_pre_sass/"+ns+"-ie9-.support.css" , '$globalVmsize: ' + custom + ";" );
+        //render_sass( "./src/scss/"+ns+"-typography.scss", "./.build/_pre_sass/"+ns+"-typography.css" , '$globalVmsize: null;'  );
+        //render_sass( "./src/scss/"+ns+"-ui.scss", "./.build/_pre_sass/"+ns+"-ui.css" , '$globalVmsize: ' + custom + ";" );
+        //render_sass( "./src/scss/"+ns+"-ie9-.support.scss", "./.build/_pre_sass/"+ns+"-ie9-.support.css" , '$globalVmsize: ' + custom + ";" );
 
-        render_sass( "./src/scss/"+ns+"-slim.scss", "./.build/_pre_sass/"+ns+"-slim.css" , '$globalVmsize: false;'  );
-        render_sass( "./src/scss/"+ns+"-custom.scss", "./.build/_pre_sass/"+ns+"-custom.css", '$globalVmsize: ' + custom + ";" );
+        //render_sass( "./src/scss/"+ns+"-slim.scss", "./.build/_pre_sass/"+ns+"-slim.css" , '$globalVmsize: false;'  );
+        //render_sass( "./src/scss/"+ns+"-custom.scss", "./.build/_pre_sass/"+ns+"-custom.css", '$globalVmsize: ' + custom + ";" );
 
 
         setTimeout( function() {

@@ -1,7 +1,7 @@
 module.exports = {
     flexed: {
         src: [
-            './src/scss/**/*.scss',
+            './src/styles/scss/**/*.scss',
                 ],
         options: {
             configFile: './tasks/.stylelintrc',
