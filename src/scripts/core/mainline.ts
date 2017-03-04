@@ -7,8 +7,10 @@ document.getElementsByTagName("html")[0].setAttribute('data-useragent', navigato
 (<any>window).WSU = (<any>window).WSU || {};
 
 (function (w: WSUstatic) {
-    w.defined = function(ns: any, type?: string) {
-        if ('undefined' !== typeof type) {
+    // a multi tool to strong type things by checking type
+    // most common use is `w.defined(type)`
+    w.defined = function(ns: any, type?: any) {
+        if ( w.defined(type) ) {
             if ('array' === type) {
                 return typeof ns === 'object' &&
                     Object.prototype.toString.call(ns) === '[object Array]';
@@ -16,9 +18,12 @@ document.getElementsByTagName("html")[0].setAttribute('data-useragent', navigato
             if ('string' === type) {
                 return Object.prototype.toString.call(ns) === '[object String]';
             }
-            return 'undefined' !== typeof ns && typeof ns === type;
+            if( w.defined(ns) && typeof ns !== type && typeof type === 'object'){
+                return ns instanceof type;
+            }
+            return w.defined(ns) && typeof ns === type;
         }
-        return typeof ns !== 'undefined';
+        return 'undefined' !== typeof ns;
     };
     w.define = function(ns: any, val?: any, ns_root?: any) {
         let parent = ns;
@@ -189,11 +194,11 @@ document.getElementsByTagName("html")[0].setAttribute('data-useragent', navigato
             add(html.slice(cursor, match.index))(match[1], true);
             cursor = match.index + match[0].length;
         }
-
-        add(html.substr(cursor, html.length - cursor));
-        code = (code + "return r.join('');").replace(/[\r\t\n]/g, "");
-        result = new Function(code).apply(options);
-
+        if(WSU.defined(html,'string')){
+            add(html.substr(cursor, html.length - cursor));
+            code = (code + "return r.join('');").replace(/[\r\t\n]/g, "");
+            result = new Function(code).apply(options);
+        }
         return result;
     };
 }((<any>window).jQuery,(<any>window).jQuery));
