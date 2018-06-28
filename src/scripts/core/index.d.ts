@@ -9,6 +9,9 @@ interface WSUstatic {
     defined(ns: any, type?: string): any;
     define(ns: any, value?: any, ns_root?: any): any;
     merge(obj: any): any;
+    extend(...p: any[]): any;
+    parse_ns(obj: any): any;
+    get_ns(ns: any): any;
     prime(ns: any, ns_root?: any, options?: any): any;
     include(ns_path: string, callback?: any): any;
 }
