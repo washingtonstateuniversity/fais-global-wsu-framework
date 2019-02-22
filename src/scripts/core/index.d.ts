@@ -1,9 +1,12 @@
 interface WSUstate {
     debug: boolean;
+    env: string;
+    console: any;
 }
 interface WSUstatic {
     state: WSUstate;
     included: any;
+    console:any;
     _d(name: any): any;
     _i(a: any, b: any): any;
     defined(ns: any, type?: string): any;
@@ -12,6 +15,7 @@ interface WSUstatic {
     extend(...p: any[]): any;
     parse_ns(obj: any): any;
     get_ns(ns: any): any;
+    render(html: string, options: any): any;
     prime(ns: any, ns_root?: any, options?: any): any;
     include(ns_path: string, callback?: any): any;
 }

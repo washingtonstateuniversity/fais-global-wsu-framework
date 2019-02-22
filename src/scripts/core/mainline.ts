@@ -33,7 +33,13 @@ document.getElementsByTagName("html")[0].setAttribute('data-useragent', navigato
             if ('number' === type) {
                 return !w.defined(ns, 'array') && (ns - parseFloat( ns ) + 1) >= 0;
             }
-            if ( 'undefined' !== typeof ns && typeof ns !== type && typeof type === 'object') {
+            if ( 'object' === type ) {
+                return Object.prototype.toString.call(ns) === '[object Object]';
+            }
+            if ( 'null' === type ) {
+                return Object.prototype.toString.call(ns) === '[object Null]';
+            }
+            if ( 'undefined' !== typeof ns && typeof ns !== type && typeof ns === 'object' && typeof type === 'object') {
                 return ns instanceof type;
             }
             return 'undefined' !== typeof ns && typeof ns === type;
@@ -67,7 +73,7 @@ document.getElementsByTagName("html")[0].setAttribute('data-useragent', navigato
      * Set up containing object and merge all items from merge list.
      *
      * @param {*} obj
-     * @returns cantaining object;
+     * @returns concatenated object;
      */
     w.merge = function(obj: any) {
         let out: any = {};
@@ -80,8 +86,8 @@ document.getElementsByTagName("html")[0].setAttribute('data-useragent', navigato
     };
 
     /**
-     * almost the same as w.prime but just mashes the colision of ns where
-     * w.prime is is the desider
+     * almost the same as w.prime but just mashes the collision of ns where
+     * w.prime is is the decider
      *
      * @param {...any[]} p
      * @returns
@@ -174,55 +180,10 @@ document.getElementsByTagName("html")[0].setAttribute('data-useragent', navigato
         return out;
     };
 
-    /**
+     /**
      * Take namespace object, parse it, check for root object passed as
      * second argument, then start there.  Apply options of setting a value
-     * if set as override or merge if ns colision occurs
-     *
-     * @param {*} ns
-     * @param {*} [ns_root]
-     * @param {*} [options]
-     * @returns
-     */
-    w.prime = function (ns: any, ns_root?: any, options?: any) {
-        ns_root = ns_root || window; // set up the root object
-        // hulk smash?
-        options = Object.assign({value: {}, override: false, merge: true, deep: true}, options); // speed it in we trust it
-
-        let parent = ns_root, // alais to work with
-            pl: number,
-            i: number;
-
-        let parts: any = w.parse_ns(ns);
-        pl = parts.length;
-        for (i = 0; i < pl; i++) {
-            // create a property if it doesnt exist
-            if ( !w.defined( parent[parts[i]] ) || ((i === pl - 1)) ) {
-                let value = parent[parts[i]] || {};
-                if ( (i === pl - 1) && w.defined(options.value)) {
-                    if ( w.defined(value) && w.defined( options.merge ) && true === options.merge ) {
-                        if ( w.defined(options.value, 'string') || w.defined(options.value, 'number') ) {
-                            // really?  lol why would you?  but regardless don't build walls so leave
-                            value = value + options.value;
-                        } else if (w.defined(options.value, 'boolean') ) {
-                            value = options.value;
-                        } else {
-                            value = w.extend(options.deep, value, options.value); // Object.assign(value, options.value);
-                        }
-                    } else if( w.defined( options.override ) && true === options.override ) {
-                        value = options.value;
-                    }
-                }
-                parent[parts[i]] = value;
-            }
-            parent = parent[parts[i]];
-        }
-        return parent;
-    };
-/**
-     * Take namespace object, parse it, check for root object passed as
-     * second argument, then start there.  Apply options of setting a value
-     * if set as override or merge if ns colision occurs
+     * if set as override or merge if ns collision occurs
      *
      * @param {*} ns
      * @param {*} [ns_root]
@@ -289,6 +250,123 @@ document.getElementsByTagName("html")[0].setAttribute('data-useragent', navigato
         // return for consistency
          w.defined(WSU.state.debug) && WSU.state.debug && (<any>window).console.info(a, b); // tslint:disable-line
     };
+
+
+    /**
+     * Take namespace object, parse it, check for root object passed as
+     * second argument, then start there.  Apply options of setting a value
+     * if set as override or merge if ns collision occurs
+     *
+     * @param {*} ns
+     * @param {*} [ns_root]
+     * @param {*} [options]
+     * @returns
+     */
+    w.prime = function (ns: any, ns_root?: any, options?: any) {
+        ns_root = ns_root || window; // set up the root object
+        // make is do one can just put in a value and take the defaults
+        options = options || {value: new Object};
+        options = !w.defined(options.value) || !w.defined(options, 'object') ? {value : options} : options;
+        // hulk smash?
+        options = Object.assign({override: false, merge: true, deep: true}, options); // speed it in we trust it
+
+        let parent = ns_root, // alias to work with
+            pl: number,
+            i: number;
+
+        let parts: any = w.parse_ns(ns);
+        pl = parts.length;
+        for (i = 0; i < pl; i++) {
+            // create a property if it doesn't exist
+            if ( !w.defined( parent[parts[i]] ) || ((i === pl - 1)) ) {
+                let value = w.defined(parent[parts[i]]) ? parent[parts[i]] : {};
+                if ( (i === pl - 1) && w.defined(options.value)) {
+                    if ( w.defined(value) && w.defined( options.merge ) && true === options.merge ) {
+                        if ( w.defined(options.value, 'string') || w.defined(options.value, 'number') ) {
+                            // really?  lol why would you?  but regardless don't build walls so leave
+                            value = value + options.value;
+                        } else if ( w.defined(options.value, 'boolean') ) {
+                            value = options.value === true;
+                        } else {
+                            value = w.extend(options.deep, value, options.value); // Object.assign(value, options.value);
+                        }
+                    } else if ( true === options.override ) {
+                        value = options.value;
+                    }
+                }
+                parent[parts[i]] = value;
+            }
+            parent = parent[parts[i]];
+        }
+        return parent;
+    };
+
+    w.render = function (html:any, options:any) {
+        // @todo add better error handling for emptys at the least
+        var re, add:any, match, cursor, code:any, reExp:any, result;
+
+        re = /<%(.+?)%>/g;
+        reExp = /(^( )?(var|if|for|else|switch|case|break|{|}|;))(.*)?/g;
+        code = "var r=[];\n";
+        cursor = 0;
+
+        add = function (line:any, js:any) {
+            if (js) {
+                code += line.match(reExp) ? line + "\n" : "r.push(" + line + ");\n";
+            } else {
+                code += line !== "" ? "r.push('" + line.replace(/'/g, "\"") + "');\n" : "";
+            }
+            return add;
+        };
+
+        while ((match = re.exec(html))) {
+            add(html.slice(cursor, match.index))(match[1], true);
+            cursor = match.index + match[0].length;
+        }
+        if(WSU.defined(html,'string')){
+            add(html.substr(cursor, html.length - cursor));
+            code = (code + "return r.join('');").replace(/[\r\t\n]/g, "");
+            result = new Function(code).apply(options);
+        }
+        return result;
+    };
+
+
+
+    let funnies = [
+        { u: 'A lot about living;', l: 'A little about love...' }
+        , { u: 'Going for distance...', l: 'going for speed!!' }
+        , { u: 'I\'ve got friends', l: 'in code places...' }
+        , { u: 'Mama...', l: 'I just killed a bug' } ];
+        let funny = funnies[Math.floor(Math.random() * funnies.length)];
+
+        console.log( '%c      ___           ___           ___\n'
+        + '     /\\  \\         /\\__\\         /\\  \\\n'
+        + '    _\\:\\  \\       /:/ _/_        \\:\\  \\        ' + funny.u + '\n'
+        + '   /\\ \\:\\  \\     /:/ /\\  \\        \\:\\  \\       ' + funny.l + '\n'
+        + '  _\\:\\ \\:\\  \\   /:/ /::\\  \\   ___  \\:\\  \\\n'
+        + ' /\\ \\:\\ \\:\\__\\ /:/_/:/\\:\\__\\ /\\  \\  \\:\\__\\\n'
+        + ' \\:\\ \\:\\/:/  / \\:\\/:/ /:/  / \\:\\  \\ /:/  /    _________    _________\n'
+        + '  \\:\\ \\::/  /   \\::/ /:/  /   \\:\\  /:/  /    / ____/   \|  /  _/ ___/\n'
+        + '   \\:\\/:/  /     \\/_/:/  /     \\:\\/:/  /    / /_  / /| |  / / \\__ \\\n'
+        + '    \\::/  /        /:/  /       \\::/  /    / __/ / ___ |_/ / ___/ /\n'
+        + '     \\/__/         \\/__/         \\/__/    /_/   /_/  |_/___//____/\n'
+        ,  'font-family:monospace');
+
+
+
+    w.prime('state',   w,       { value: {},            override: false }); // honestly this shouldn't be this way, should be smarter
+    w.prime('debug',   w.state, { value: false,         override: false, merge: false });
+    w.prime('env',     w.state, { value: 'development', override: false, merge: false });
+    w.prime('console', w.state, { value: true,          override: false, merge: false });
+    console.log('c:' + w.state.console.toString() + ':d:'  + w.state.debug.toString() + ':e:' + w.state.env.toString().toLowerCase() );
+    if ( ( !w.state.debug && w.state.env.toString().toLowerCase() !== 'development' )
+         || !w.state.console ) {
+        w.console = console;
+        console.log('-- Turning console (general std_out) OFF');
+        console.log = console.debug = console.info = function( ) {};
+    }
+
 }(WSU));
 
 
@@ -341,33 +419,5 @@ document.getElementsByTagName("html")[0].setAttribute('data-useragent', navigato
         });
     }));
 
-    $.render = function (html:any, options:any) {
-        // @todo add better error handling for emptys at the least
-        var re, add:any, match, cursor, code:any, reExp:any, result;
-
-        re = /<%(.+?)%>/g;
-        reExp = /(^( )?(var|if|for|else|switch|case|break|{|}|;))(.*)?/g;
-        code = "var r=[];\n";
-        cursor = 0;
-
-        add = function (line:any, js:any) {
-            if (js) {
-                code += line.match(reExp) ? line + "\n" : "r.push(" + line + ");\n";
-            } else {
-                code += line !== "" ? "r.push('" + line.replace(/'/g, "\"") + "');\n" : "";
-            }
-            return add;
-        };
-
-        while ((match = re.exec(html))) {
-            add(html.slice(cursor, match.index))(match[1], true);
-            cursor = match.index + match[0].length;
-        }
-        if(WSU.defined(html,'string')){
-            add(html.substr(cursor, html.length - cursor));
-            code = (code + "return r.join('');").replace(/[\r\t\n]/g, "");
-            result = new Function(code).apply(options);
-        }
-        return result;
-    };
+    $.render = WSU.render;
 }((<any>window).jQuery,(<any>window).jQuery));
