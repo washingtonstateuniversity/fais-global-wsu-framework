@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "lib": ["es2015", "es2017", "dom"],
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "noImplicitAny": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "outDir": "./www/scripts/"
+    },
+    "compileOnSave": true,
+    "exclude": [
+        "node_modules",
+        "node_modules/*",
+        "**/*-aot.ts"
+    ]
+}
