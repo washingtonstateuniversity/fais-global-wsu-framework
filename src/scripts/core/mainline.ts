@@ -220,7 +220,7 @@ document.getElementsByTagName("html")[0].setAttribute('data-useragent', navigato
      */
     w.included = []; // tracker
     w.include = function (ns_path: string, callback?: any){
-        if (!w.defined(w.included[ns_path])) { // if it is loaded don't worry
+        if (w.defined(ns_path,"string") && !w.defined(w.included[ns_path])) { // if it is loaded don't worry
             let srpt = document.createElement('script');
             if ( w.defined(callback, 'function') ) {
                 srpt.addEventListener('load', callback); // pass my hoisted function
