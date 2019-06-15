@@ -168,6 +168,9 @@ document.getElementsByTagName("html")[0].setAttribute('data-useragent', navigato
      */
     w.parse_ns = function (_ns: any): any { // should be able to refactor this bit
         let out: any = [];
+        if ( !w.defined(_ns)){
+            return out;
+        }
         if ( !w.defined(_ns, 'object') ) { // eg string or number //was 'object' !== typeof _ns
             try {
                 out = _ns.toString().split('.');
