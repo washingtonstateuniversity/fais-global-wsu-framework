@@ -77,6 +77,9 @@ document.getElementsByTagName("html")[0].setAttribute('data-useragent', navigato
      */
     w.merge = function(obj: any) {
         let out: any = {};
+        if(!w.defined(obj,'object')){
+            return out;
+        }
         for (let i = 0; i < obj.length; i++) {
             for (let p of Object.keys(obj[i]) ) { // let p in obj[i]) {
                 out[p] = obj[i][p];
@@ -364,7 +367,7 @@ document.getElementsByTagName("html")[0].setAttribute('data-useragent', navigato
          || !w.state.console ) {
         w.console = console;
         console.log('-- Turning console (general std_out) OFF');
-        console.log = console.debug = console.info = function( ) {};
+        console.log = console.debug = console.info = console.warn = function( ) {};
     }
 
 }(WSU));
